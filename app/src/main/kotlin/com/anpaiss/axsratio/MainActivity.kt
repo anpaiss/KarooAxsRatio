@@ -52,15 +52,15 @@ class MainActivity : AppCompatActivity() {
     private fun refresh() {
         val canDraw = Settings.canDrawOverlays(this)
         permissionBtn.isEnabled = !canDraw
-        permissionBtn.text = if (canDraw) "Permesso overlay: OK" else "Concedi permesso overlay"
+        permissionBtn.text = if (canDraw) "Overlay permission: OK" else "Grant overlay permission"
 
         toggleBtn.isEnabled = canDraw
-        toggleBtn.text = if (prefs.enabled) "Disattiva overlay" else "Attiva overlay"
+        toggleBtn.text = if (prefs.enabled) "Disable overlay" else "Enable overlay"
 
         statusText.text = when {
-            !canDraw       -> "1) Concedi il permesso di disegnare sopra le altre app."
-            !prefs.enabled -> "2) Attiva l'overlay. Mostrerà il pignone corrente in basso a destra."
-            else           -> "Overlay attivo. Esci dall'app — il rettangolo rimane visibile sopra le pagine Karoo."
+            !canDraw       -> "1) Grant permission to draw over other apps."
+            !prefs.enabled -> "2) Enable the overlay. Current rear gear will show in the bottom-right corner."
+            else           -> "Overlay active. Leave this app — the indicator stays visible over Karoo pages."
         }
     }
 }

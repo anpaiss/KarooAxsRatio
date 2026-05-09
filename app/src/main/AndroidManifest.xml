@@ -32,7 +32,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Overlay rapporto AXS sempre visibile durante l'attività" />
+                android:value="Always-visible overlay showing current AXS rear gear during rides" />
         </service>
 
         <receiver

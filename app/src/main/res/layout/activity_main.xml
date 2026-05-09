@@ -25,13 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Concedi permesso overlay" />
+        android:text="Grant overlay permission" />
 
     <Button
         android:id="@+id/btn_toggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Attiva overlay" />
+        android:text="Enable overlay" />
 
 </LinearLayout>

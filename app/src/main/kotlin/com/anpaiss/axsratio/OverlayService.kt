@@ -112,7 +112,7 @@ class OverlayService : Service() {
         }
         val n: Notification = NotificationCompat.Builder(this, CH_ID)
             .setContentTitle("AXS Ratio")
-            .setContentText("Overlay attivo")
+            .setContentText("Overlay active")
             .setSmallIcon(android.R.drawable.ic_menu_view)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_MIN)
