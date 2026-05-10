@@ -22,6 +22,13 @@ import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.StreamState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class OverlayService : Service() {
 
@@ -31,6 +38,9 @@ class OverlayService : Service() {
     private var windowManager: WindowManager? = null
     private var overlayView: View? = null
     private var textView: TextView? = null
+
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var previewJob: Job? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -124,10 +134,23 @@ class OverlayService : Service() {
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == ACTION_PREVIEW) {
+            previewJob?.cancel()
+            previewJob = scope.launch {
+                for (gear in 1..12) {
+                    renderGear(gear)
+                    delay(1000)
+                }
+            }
+        }
+        return START_STICKY
+    }
 
     override fun onDestroy() {
         Log.i(TAG, "onDestroy")
+        previewJob?.cancel()
+        scope.cancel()
         consumerIds.forEach { runCatching { karoo.removeConsumer(it) } }
         consumerIds.clear()
         runCatching { karoo.disconnect() }
@@ -144,6 +167,8 @@ class OverlayService : Service() {
         private const val NOTIF_ID  = 1
         private const val MARGIN_DP = 12
 
+        const val ACTION_PREVIEW = "com.anpaiss.axsratio.PREVIEW"
+
         fun start(ctx: Context) {
             val intent = Intent(ctx, OverlayService::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -155,6 +180,10 @@ class OverlayService : Service() {
 
         fun stop(ctx: Context) {
             ctx.stopService(Intent(ctx, OverlayService::class.java))
+        }
+
+        fun preview(ctx: Context) {
+            ctx.startService(Intent(ctx, OverlayService::class.java).setAction(ACTION_PREVIEW))
         }
     }
 }

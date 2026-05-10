@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var permissionBtn: Button
     private lateinit var toggleBtn: Button
+    private lateinit var previewBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         statusText    = findViewById(R.id.tv_status)
         permissionBtn = findViewById(R.id.btn_permission)
         toggleBtn     = findViewById(R.id.btn_toggle)
+        previewBtn    = findViewById(R.id.btn_preview)
 
         permissionBtn.setOnClickListener {
             startActivity(
@@ -42,6 +44,11 @@ class MainActivity : AppCompatActivity() {
             }
             refresh()
         }
+
+        previewBtn.setOnClickListener {
+            OverlayService.preview(this)
+            statusText.text = "Previewing gears 1-12 (12 s). Move this app to background to see the overlay."
+        }
     }
 
     override fun onResume() {
@@ -56,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         toggleBtn.isEnabled = canDraw
         toggleBtn.text = if (prefs.enabled) "Disable overlay" else "Enable overlay"
+
+        previewBtn.isEnabled = canDraw && prefs.enabled
 
         statusText.text = when {
             !canDraw       -> "1) Grant permission to draw over other apps."
