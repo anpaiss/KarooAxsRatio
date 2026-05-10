@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         statusText.text = when {
             !canDraw       -> "1) Grant permission to draw over other apps."
-            !prefs.enabled -> "2) Enable the overlay. Current rear gear will show in the bottom-right corner."
+            !prefs.enabled -> "2) Enable the overlay. Current rear gear will show in the top-left corner."
             else           -> "Overlay active. Leave this app — the indicator stays visible over Karoo pages."
         }
     }
