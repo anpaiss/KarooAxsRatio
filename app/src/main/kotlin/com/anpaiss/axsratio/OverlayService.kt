@@ -135,13 +135,20 @@ class OverlayService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == ACTION_PREVIEW) {
-            previewJob?.cancel()
-            previewJob = scope.launch {
-                for (gear in 1..12) {
-                    renderGear(gear)
-                    delay(1000)
+        when (intent?.action) {
+            ACTION_PREVIEW -> {
+                previewJob?.cancel()
+                previewJob = scope.launch {
+                    for (gear in 1..12) {
+                        renderGear(gear)
+                        delay(1000)
+                    }
                 }
+            }
+            ACTION_STOP_PREVIEW -> {
+                previewJob?.cancel()
+                previewJob = null
+                renderGear(null)
             }
         }
         return START_STICKY
@@ -167,7 +174,8 @@ class OverlayService : Service() {
         private const val NOTIF_ID  = 1
         private const val MARGIN_DP = 12
 
-        const val ACTION_PREVIEW = "com.anpaiss.axsratio.PREVIEW"
+        const val ACTION_PREVIEW      = "com.anpaiss.axsratio.PREVIEW"
+        const val ACTION_STOP_PREVIEW = "com.anpaiss.axsratio.STOP_PREVIEW"
 
         fun start(ctx: Context) {
             val intent = Intent(ctx, OverlayService::class.java)
@@ -184,6 +192,10 @@ class OverlayService : Service() {
 
         fun preview(ctx: Context) {
             ctx.startService(Intent(ctx, OverlayService::class.java).setAction(ACTION_PREVIEW))
+        }
+
+        fun stopPreview(ctx: Context) {
+            ctx.startService(Intent(ctx, OverlayService::class.java).setAction(ACTION_STOP_PREVIEW))
         }
     }
 }

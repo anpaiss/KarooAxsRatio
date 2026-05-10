@@ -15,6 +15,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var permissionBtn: Button
     private lateinit var toggleBtn: Button
     private lateinit var previewBtn: Button
+    private var previewing = false
+    private val previewAutoStop = Runnable {
+        previewing = false
+        refresh()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +51,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         previewBtn.setOnClickListener {
-            OverlayService.preview(this)
-            statusText.text = "Previewing gears 1-12 (12 s). Move this app to background to see the overlay."
+            if (previewing) {
+                OverlayService.stopPreview(this)
+                previewBtn.removeCallbacks(previewAutoStop)
+                previewing = false
+            } else {
+                OverlayService.preview(this)
+                previewing = true
+                previewBtn.postDelayed(previewAutoStop, 12_500L)
+            }
+            refresh()
         }
     }
 
@@ -65,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         toggleBtn.text = if (prefs.enabled) "Disable overlay" else "Enable overlay"
 
         previewBtn.isEnabled = canDraw && prefs.enabled
+        previewBtn.text = if (previewing) "Stop preview" else "Preview gears 1-12"
 
         statusText.text = when {
             !canDraw       -> "1) Grant permission to draw over other apps."
