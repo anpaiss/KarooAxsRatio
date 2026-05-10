@@ -10,7 +10,7 @@ enum class Metric(
     val heightDp:    Int,
     val textSizeSp:  Int,
 ) {
-    GEAR   ("Gear",    DataType.Type.SHIFTING_REAR_GEAR, 80, 56, 36),
+    GEAR   ("Gear",    DataType.Type.SHIFTING_REAR_GEAR, 44, 40, 30),
     HR     ("HR",      DataType.Type.HEART_RATE,         96, 56, 32),
     POWER  ("Power",   DataType.Type.POWER,              96, 56, 30),
     CADENCE("Cadence", DataType.Type.CADENCE,            80, 56, 30),
