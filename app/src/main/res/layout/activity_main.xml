@@ -1,44 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#FF5823" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="13sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FF5823" />
 
-    <Button
-        android:id="@+id/btn_permission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Grant overlay permission" />
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="13sp" />
 
-    <Button
-        android:id="@+id/btn_toggle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Enable overlay" />
+        <Button
+            android:id="@+id/btn_permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Grant overlay permission" />
 
-    <Button
-        android:id="@+id/btn_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Preview gears 1-12" />
+        <Button
+            android:id="@+id/btn_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Enable overlay" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Preview gears 1-12" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="#888888" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Metric placement"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Gear" />
+            <Spinner android:id="@+id/sp_gear" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="HR" />
+            <Spinner android:id="@+id/sp_hr" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Power" />
+            <Spinner android:id="@+id/sp_power" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Cadence" />
+            <Spinner android:id="@+id/sp_cadence" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Speed" />
+            <Spinner android:id="@+id/sp_speed" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Grade" />
+            <Spinner android:id="@+id/sp_grade" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Temp" />
+            <Spinner android:id="@+id/sp_temp" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -4,7 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,11 +19,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var permissionBtn: Button
     private lateinit var toggleBtn: Button
     private lateinit var previewBtn: Button
+
+    private val spinners = mutableMapOf<Metric, Spinner>()
+    private val slotValues = Slot.values()
+    private val slotLabels = slotValues.map { it.label }
+
     private var previewing = false
     private val previewAutoStop = Runnable {
         previewing = false
         refresh()
     }
+
+    private var suppressSpinnerCallbacks = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +40,14 @@ class MainActivity : AppCompatActivity() {
         permissionBtn = findViewById(R.id.btn_permission)
         toggleBtn     = findViewById(R.id.btn_toggle)
         previewBtn    = findViewById(R.id.btn_preview)
+
+        bindSpinner(Metric.GEAR,    R.id.sp_gear)
+        bindSpinner(Metric.HR,      R.id.sp_hr)
+        bindSpinner(Metric.POWER,   R.id.sp_power)
+        bindSpinner(Metric.CADENCE, R.id.sp_cadence)
+        bindSpinner(Metric.SPEED,   R.id.sp_speed)
+        bindSpinner(Metric.GRADE,   R.id.sp_grade)
+        bindSpinner(Metric.TEMP,    R.id.sp_temp)
 
         permissionBtn.setOnClickListener {
             startActivity(
@@ -64,9 +83,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun bindSpinner(metric: Metric, viewId: Int) {
+        val sp = findViewById<Spinner>(viewId)
+        sp.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, slotLabels)
+        sp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (suppressSpinnerCallbacks) return
+                val newSlot = slotValues[position]
+                if (prefs.slotFor(metric) == newSlot) return
+                prefs.setSlotFor(metric, newSlot)
+                refreshSpinners()
+                refresh()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        spinners[metric] = sp
+    }
+
     override fun onResume() {
         super.onResume()
+        refreshSpinners()
         refresh()
+    }
+
+    private fun refreshSpinners() {
+        suppressSpinnerCallbacks = true
+        for ((metric, sp) in spinners) {
+            val ord = prefs.slotFor(metric).ordinal
+            if (sp.selectedItemPosition != ord) sp.setSelection(ord, false)
+        }
+        suppressSpinnerCallbacks = false
     }
 
     private fun refresh() {
@@ -77,13 +123,15 @@ class MainActivity : AppCompatActivity() {
         toggleBtn.isEnabled = canDraw
         toggleBtn.text = if (prefs.enabled) "Disable overlay" else "Enable overlay"
 
-        previewBtn.isEnabled = canDraw && prefs.enabled
+        val gearPlaced = prefs.slotFor(Metric.GEAR) != Slot.OFF
+        previewBtn.isEnabled = canDraw && prefs.enabled && gearPlaced
         previewBtn.text = if (previewing) "Stop preview" else "Preview gears 1-12"
 
         statusText.text = when {
             !canDraw       -> "1) Grant permission to draw over other apps."
-            !prefs.enabled -> "2) Enable the overlay. Current rear gear will show in the top-left corner."
-            else           -> "Overlay active. Leave this app — the indicator stays visible over Karoo pages."
+            !prefs.enabled -> "2) Enable the overlay, then place metrics in the corners below."
+            previewing     -> "Previewing gears 1-12. Move this app to background."
+            else           -> "Overlay active. Picking the same corner for two metrics moves the previous one to Off."
         }
     }
 }

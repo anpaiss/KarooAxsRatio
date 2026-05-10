@@ -6,14 +6,16 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
@@ -33,83 +35,133 @@ import kotlinx.coroutines.launch
 class OverlayService : Service() {
 
     private lateinit var karoo: KarooSystemService
+    private lateinit var prefs: Prefs
     private val consumerIds = mutableListOf<String>()
-
     private var windowManager: WindowManager? = null
-    private var overlayView: View? = null
-    private var textView: TextView? = null
+
+    private data class MetricView(
+        val view: TextView,
+        val background: GradientDrawable,
+    )
+
+    private val metricViews = mutableMapOf<Metric, MetricView>()
+    private val lastValues  = mutableMapOf<Metric, Double?>()
+    @Volatile private var hrZone: Int? = null
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var previewJob: Job? = null
+    private var karooConnected = false
+
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == null || key.startsWith(Prefs.KEY_SLOT_PREFIX)) {
+            scope.launch { rebuild() }
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate")
+        prefs = Prefs(applicationContext)
         startInForeground()
 
         if (!Settings.canDrawOverlays(this)) {
-            Log.w(TAG, "Permesso overlay mancante — stop service")
+            Log.w(TAG, "Overlay permission missing — stop service")
             stopSelf()
             return
         }
 
-        addOverlay()
-
+        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         karoo = KarooSystemService(applicationContext)
         karoo.connect { connected ->
             Log.i(TAG, "Karoo connected=$connected")
-            if (!connected) return@connect
-
-            consumerIds += karoo.addConsumer(
-                OnStreamState.StartStreaming(DataType.Type.SHIFTING_REAR_GEAR), { _ -> }, {}
-            ) { event: OnStreamState ->
-                val gear = (event.state as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt()
-                renderGear(gear)
-            }
+            karooConnected = connected
+            if (connected) scope.launch { rebuild() }
         }
+        prefs.sp.registerOnSharedPreferenceChangeListener(prefsListener)
     }
 
-    private fun addOverlay() {
-        val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val view = LayoutInflater.from(this).inflate(R.layout.overlay_gear, null, false)
-        val tv = view.findViewById<TextView>(R.id.tv_gear)
+    private fun rebuild() {
+        consumerIds.forEach { runCatching { karoo.removeConsumer(it) } }
+        consumerIds.clear()
+        metricViews.values.forEach { mv -> runCatching { windowManager?.removeView(mv.view) } }
+        metricViews.clear()
+        hrZone = null
+
+        var hrPlaced = false
+        for (metric in Metric.values()) {
+            val slot = prefs.slotFor(metric)
+            if (slot == Slot.OFF) continue
+            addMetricView(metric, slot)
+            if (karooConnected) subscribeMetric(metric)
+            if (metric == Metric.HR) hrPlaced = true
+        }
+        if (hrPlaced && karooConnected) subscribeHrZone()
+    }
+
+    private fun addMetricView(metric: Metric, slot: Slot) {
+        val wm = windowManager ?: return
+        val tv = TextView(this).apply {
+            gravity = Gravity.CENTER
+            setTextColor(0xFFFFFFFF.toInt())
+            textSize = metric.textSizeSp.toFloat()
+            setTypeface(typeface, Typeface.BOLD)
+            includeFontPadding = false
+            text = "-"
+        }
+        val bg = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = dpF(6f)
+            setColor(Metric.COLOR_DEFAULT)
+        }
+        tv.background = bg
 
         val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            dpI(metric.widthDp),
+            dpI(metric.heightDp),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT,
         ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = MARGIN_DP
-            y = MARGIN_DP
+            gravity = slot.gravityFlags
+            x = dpI(MARGIN_DP)
+            y = dpI(MARGIN_DP)
         }
 
-        wm.addView(view, params)
-        windowManager = wm
-        overlayView = view
-        textView = tv
-        renderGear(null)
+        wm.addView(tv, params)
+        metricViews[metric] = MetricView(tv, bg)
     }
 
-    private fun renderGear(gear: Int?) {
-        val tv = textView ?: return
-        tv.post {
-            if (gear == null || gear <= 0) {
-                tv.text = "-"
-                tv.setBackgroundResource(R.drawable.bg_orange)
-            } else if (gear < 10) {
-                tv.text = gear.toString()
-                tv.setBackgroundResource(R.drawable.bg_orange)
-            } else {
-                tv.text = (gear % 10).toString()
-                tv.setBackgroundResource(R.drawable.bg_black)
-            }
+    private fun subscribeMetric(metric: Metric) {
+        consumerIds += karoo.addConsumer(
+            OnStreamState.StartStreaming(metric.streamType), { _ -> }, {}
+        ) { event: OnStreamState ->
+            val v = (event.state as? StreamState.Streaming)?.dataPoint?.singleValue
+            lastValues[metric] = v
+            render(metric)
+        }
+    }
+
+    private fun subscribeHrZone() {
+        consumerIds += karoo.addConsumer(
+            OnStreamState.StartStreaming(DataType.Type.HR_ZONE), { _ -> }, {}
+        ) { event: OnStreamState ->
+            hrZone = (event.state as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt()
+            render(Metric.HR)
+        }
+    }
+
+    private fun render(metric: Metric) {
+        val mv = metricViews[metric] ?: return
+        val value = lastValues[metric]
+        val text  = metric.format(value)
+        val color = metric.backgroundColor(value, hrZone)
+        mv.view.post {
+            mv.view.text = text
+            mv.background.setColor(color)
         }
     }
 
@@ -136,37 +188,47 @@ class OverlayService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            ACTION_PREVIEW -> {
-                previewJob?.cancel()
-                previewJob = scope.launch {
-                    for (gear in 1..12) {
-                        renderGear(gear)
-                        delay(1000)
-                    }
-                }
-            }
-            ACTION_STOP_PREVIEW -> {
-                previewJob?.cancel()
-                previewJob = null
-                renderGear(null)
-            }
+            ACTION_PREVIEW -> startGearPreview()
+            ACTION_STOP_PREVIEW -> stopGearPreview()
         }
         return START_STICKY
+    }
+
+    private fun startGearPreview() {
+        if (metricViews[Metric.GEAR] == null) return
+        previewJob?.cancel()
+        previewJob = scope.launch {
+            for (gear in 1..12) {
+                lastValues[Metric.GEAR] = gear.toDouble()
+                render(Metric.GEAR)
+                delay(1000)
+            }
+        }
+    }
+
+    private fun stopGearPreview() {
+        previewJob?.cancel()
+        previewJob = null
+        lastValues[Metric.GEAR] = null
+        render(Metric.GEAR)
     }
 
     override fun onDestroy() {
         Log.i(TAG, "onDestroy")
         previewJob?.cancel()
+        runCatching { prefs.sp.unregisterOnSharedPreferenceChangeListener(prefsListener) }
         scope.cancel()
         consumerIds.forEach { runCatching { karoo.removeConsumer(it) } }
         consumerIds.clear()
         runCatching { karoo.disconnect() }
-        overlayView?.let { runCatching { windowManager?.removeView(it) } }
-        overlayView = null
-        textView = null
+        metricViews.values.forEach { mv -> runCatching { windowManager?.removeView(mv.view) } }
+        metricViews.clear()
         windowManager = null
         super.onDestroy()
     }
+
+    private fun dpF(v: Float): Float = v * resources.displayMetrics.density
+    private fun dpI(v: Int): Int = (v * resources.displayMetrics.density).toInt()
 
     companion object {
         private const val TAG       = "AxsRatio"
