@@ -94,5 +94,10 @@
             <Spinner android:id="@+id/sp_temp" style="@style/MetricSpinner" />
         </LinearLayout>
 
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="To next turn" />
+            <Spinner android:id="@+id/sp_dist_turn" style="@style/MetricSpinner" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

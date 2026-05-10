@@ -15,8 +15,9 @@ enum class Metric(
     POWER  ("Power",   DataType.Type.POWER,              64, 40, 24),
     CADENCE("Cadence", DataType.Type.CADENCE,            56, 40, 24),
     SPEED  ("Speed",   DataType.Type.SPEED,              52, 40, 24),
-    GRADE  ("Grade",   DataType.Type.ELEVATION_GRADE,    64, 40, 20),
-    TEMP   ("Temp",    DataType.Type.TEMPERATURE,        52, 40, 22),
+    GRADE    ("Grade",       DataType.Type.ELEVATION_GRADE,       64, 40, 20),
+    TEMP     ("Temp",        DataType.Type.TEMPERATURE,           52, 40, 22),
+    DIST_TURN("To next turn",DataType.Type.DISTANCE_TO_NEXT_TURN, 72, 40, 20),
     ;
 
     fun format(value: Double?): String = when (this) {
@@ -29,6 +30,10 @@ enum class Metric(
         SPEED              -> value?.let { (it * 3.6).roundToInt().toString() } ?: "-"
         GRADE              -> value?.let { String.format("%+.0f%%", it) } ?: "-"
         TEMP               -> value?.let { "${it.roundToInt()}°" } ?: "-"
+        DIST_TURN          -> value?.let {
+            val m = it.roundToInt()
+            if (m < 1000) "${m}m" else String.format("%.1fk", m / 1000.0)
+        } ?: "-"
     }
 
     /** ARGB background. For HR pass the latest [hrZone]; ignored otherwise. */

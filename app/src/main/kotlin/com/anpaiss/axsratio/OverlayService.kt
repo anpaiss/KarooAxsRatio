@@ -220,13 +220,14 @@ class OverlayService : Service() {
     }
 
     private fun previewValueAt(metric: Metric, i: Int): Double = when (metric) {
-        Metric.GEAR    -> (i + 1).toDouble()
-        Metric.HR      -> PREVIEW_HR[i]
-        Metric.POWER   -> PREVIEW_POWER[i]
-        Metric.CADENCE -> PREVIEW_CADENCE[i]
-        Metric.SPEED   -> PREVIEW_SPEED_KMH[i] / 3.6  // formatter expects m/s
-        Metric.GRADE   -> PREVIEW_GRADE[i]
-        Metric.TEMP    -> PREVIEW_TEMP[i]
+        Metric.GEAR      -> (i + 1).toDouble()
+        Metric.HR        -> PREVIEW_HR[i]
+        Metric.POWER     -> PREVIEW_POWER[i]
+        Metric.CADENCE   -> PREVIEW_CADENCE[i]
+        Metric.SPEED     -> PREVIEW_SPEED_KMH[i] / 3.6  // formatter expects m/s
+        Metric.GRADE     -> PREVIEW_GRADE[i]
+        Metric.TEMP      -> PREVIEW_TEMP[i]
+        Metric.DIST_TURN -> PREVIEW_DIST_TURN[i]
     }
 
     private fun previewHrZoneAt(i: Int): Int = when {
@@ -270,6 +271,7 @@ class OverlayService : Service() {
         private val PREVIEW_SPEED_KMH = doubleArrayOf( 10.0,  15.0,  20.0,  25.0,  30.0,  35.0,  40.0,  45.0,  40.0,  35.0,  30.0,  25.0)
         private val PREVIEW_GRADE     = doubleArrayOf(-10.0,  -8.0,  -5.0,  -2.0,   0.0,   2.0,   5.0,   8.0,  10.0,   7.0,   3.0,  -3.0)
         private val PREVIEW_TEMP      = doubleArrayOf(  0.0,   5.0,  10.0,  15.0,  18.0,  20.0,  22.0,  25.0,  28.0,  30.0,  22.0,  15.0)
+        private val PREVIEW_DIST_TURN = doubleArrayOf(  5.0,  25.0,  80.0, 150.0, 300.0, 500.0, 800.0,1200.0,2500.0,5000.0, 800.0, 200.0)
 
         fun start(ctx: Context) {
             val intent = Intent(ctx, OverlayService::class.java)

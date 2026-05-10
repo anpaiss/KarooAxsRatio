@@ -46,8 +46,9 @@ class MainActivity : AppCompatActivity() {
         bindSpinner(Metric.POWER,   R.id.sp_power)
         bindSpinner(Metric.CADENCE, R.id.sp_cadence)
         bindSpinner(Metric.SPEED,   R.id.sp_speed)
-        bindSpinner(Metric.GRADE,   R.id.sp_grade)
-        bindSpinner(Metric.TEMP,    R.id.sp_temp)
+        bindSpinner(Metric.GRADE,     R.id.sp_grade)
+        bindSpinner(Metric.TEMP,      R.id.sp_temp)
+        bindSpinner(Metric.DIST_TURN, R.id.sp_dist_turn)
 
         permissionBtn.setOnClickListener {
             startActivity(
