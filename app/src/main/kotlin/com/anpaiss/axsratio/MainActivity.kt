@@ -123,14 +123,14 @@ class MainActivity : AppCompatActivity() {
         toggleBtn.isEnabled = canDraw
         toggleBtn.text = if (prefs.enabled) "Disable overlay" else "Enable overlay"
 
-        val gearPlaced = prefs.slotFor(Metric.GEAR) != Slot.OFF
-        previewBtn.isEnabled = canDraw && prefs.enabled && gearPlaced
-        previewBtn.text = if (previewing) "Stop preview" else "Preview gears 1-12"
+        val anyPlaced = Metric.values().any { prefs.slotFor(it) != Slot.OFF }
+        previewBtn.isEnabled = canDraw && prefs.enabled && anyPlaced
+        previewBtn.text = if (previewing) "Stop preview" else "Preview"
 
         statusText.text = when {
             !canDraw       -> "1) Grant permission to draw over other apps."
             !prefs.enabled -> "2) Enable the overlay, then place metrics in the corners below."
-            previewing     -> "Previewing gears 1-12. Move this app to background."
+            previewing     -> "Previewing all active metrics. Move this app to background."
             else           -> "Overlay active. Picking the same corner for two metrics moves the previous one to Off."
         }
     }

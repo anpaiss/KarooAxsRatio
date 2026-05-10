@@ -188,29 +188,53 @@ class OverlayService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            ACTION_PREVIEW -> startGearPreview()
-            ACTION_STOP_PREVIEW -> stopGearPreview()
+            ACTION_PREVIEW      -> startPreview()
+            ACTION_STOP_PREVIEW -> stopPreview()
         }
         return START_STICKY
     }
 
-    private fun startGearPreview() {
-        if (metricViews[Metric.GEAR] == null) return
+    private fun startPreview() {
+        if (metricViews.isEmpty()) return
         previewJob?.cancel()
         previewJob = scope.launch {
-            for (gear in 1..12) {
-                lastValues[Metric.GEAR] = gear.toDouble()
-                render(Metric.GEAR)
+            for (i in 0 until PREVIEW_STEPS) {
+                for (metric in metricViews.keys) {
+                    lastValues[metric] = previewValueAt(metric, i)
+                    if (metric == Metric.HR) hrZone = previewHrZoneAt(i)
+                    render(metric)
+                }
                 delay(1000)
             }
         }
     }
 
-    private fun stopGearPreview() {
+    private fun stopPreview() {
         previewJob?.cancel()
         previewJob = null
-        lastValues[Metric.GEAR] = null
-        render(Metric.GEAR)
+        for (metric in metricViews.keys) {
+            lastValues[metric] = null
+            if (metric == Metric.HR) hrZone = null
+            render(metric)
+        }
+    }
+
+    private fun previewValueAt(metric: Metric, i: Int): Double = when (metric) {
+        Metric.GEAR    -> (i + 1).toDouble()
+        Metric.HR      -> PREVIEW_HR[i]
+        Metric.POWER   -> PREVIEW_POWER[i]
+        Metric.CADENCE -> PREVIEW_CADENCE[i]
+        Metric.SPEED   -> PREVIEW_SPEED_KMH[i] / 3.6  // formatter expects m/s
+        Metric.GRADE   -> PREVIEW_GRADE[i]
+        Metric.TEMP    -> PREVIEW_TEMP[i]
+    }
+
+    private fun previewHrZoneAt(i: Int): Int = when {
+        PREVIEW_HR[i] < 100 -> 1
+        PREVIEW_HR[i] < 130 -> 2
+        PREVIEW_HR[i] < 150 -> 3
+        PREVIEW_HR[i] < 170 -> 4
+        else                -> 5
     }
 
     override fun onDestroy() {
@@ -238,6 +262,14 @@ class OverlayService : Service() {
 
         const val ACTION_PREVIEW      = "com.anpaiss.axsratio.PREVIEW"
         const val ACTION_STOP_PREVIEW = "com.anpaiss.axsratio.STOP_PREVIEW"
+
+        private const val PREVIEW_STEPS = 12
+        private val PREVIEW_HR        = doubleArrayOf( 60.0,  80.0, 100.0, 120.0, 140.0, 155.0, 165.0, 175.0, 160.0, 140.0, 110.0,  90.0)
+        private val PREVIEW_POWER     = doubleArrayOf( 50.0, 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0, 350.0, 300.0, 250.0, 200.0)
+        private val PREVIEW_CADENCE   = doubleArrayOf( 60.0,  70.0,  80.0,  85.0,  90.0,  95.0, 100.0, 105.0, 100.0,  95.0,  90.0,  85.0)
+        private val PREVIEW_SPEED_KMH = doubleArrayOf( 10.0,  15.0,  20.0,  25.0,  30.0,  35.0,  40.0,  45.0,  40.0,  35.0,  30.0,  25.0)
+        private val PREVIEW_GRADE     = doubleArrayOf(-10.0,  -8.0,  -5.0,  -2.0,   0.0,   2.0,   5.0,   8.0,  10.0,   7.0,   3.0,  -3.0)
+        private val PREVIEW_TEMP      = doubleArrayOf(  0.0,   5.0,  10.0,  15.0,  18.0,  20.0,  22.0,  25.0,  28.0,  30.0,  22.0,  15.0)
 
         fun start(ctx: Context) {
             val intent = Intent(ctx, OverlayService::class.java)
