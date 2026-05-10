@@ -11,12 +11,12 @@ enum class Metric(
     val textSizeSp:  Int,
 ) {
     GEAR   ("Gear",    DataType.Type.SHIFTING_REAR_GEAR, 44, 40, 30),
-    HR     ("HR",      DataType.Type.HEART_RATE,         96, 56, 32),
-    POWER  ("Power",   DataType.Type.POWER,              96, 56, 30),
-    CADENCE("Cadence", DataType.Type.CADENCE,            80, 56, 30),
-    SPEED  ("Speed",   DataType.Type.SPEED,              80, 56, 30),
-    GRADE  ("Grade",   DataType.Type.ELEVATION_GRADE,    96, 56, 26),
-    TEMP   ("Temp",    DataType.Type.TEMPERATURE,        80, 56, 28),
+    HR     ("HR",      DataType.Type.HEART_RATE,         64, 40, 24),
+    POWER  ("Power",   DataType.Type.POWER,              64, 40, 24),
+    CADENCE("Cadence", DataType.Type.CADENCE,            56, 40, 24),
+    SPEED  ("Speed",   DataType.Type.SPEED,              52, 40, 24),
+    GRADE  ("Grade",   DataType.Type.ELEVATION_GRADE,    64, 40, 20),
+    TEMP   ("Temp",    DataType.Type.TEMPERATURE,        52, 40, 22),
     ;
 
     fun format(value: Double?): String = when (this) {
