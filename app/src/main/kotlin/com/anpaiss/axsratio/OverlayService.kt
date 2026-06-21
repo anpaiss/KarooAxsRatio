@@ -269,7 +269,7 @@ class OverlayService : Service() {
         private const val TAG       = "AxsRatio"
         private const val CH_ID     = "axs_ratio_overlay"
         private const val NOTIF_ID  = 1
-        private const val MARGIN_DP = 12
+        private const val MARGIN_DP = 2
 
         const val ACTION_PREVIEW      = "com.anpaiss.axsratio.PREVIEW"
         const val ACTION_STOP_PREVIEW = "com.anpaiss.axsratio.STOP_PREVIEW"
