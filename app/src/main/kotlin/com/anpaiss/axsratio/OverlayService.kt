@@ -127,8 +127,9 @@ class OverlayService : Service() {
             PixelFormat.TRANSLUCENT,
         ).apply {
             gravity = slot.gravityFlags
+            val isTop = (slot.gravityFlags and Gravity.VERTICAL_GRAVITY_MASK) == Gravity.TOP
             x = dpI(MARGIN_DP)
-            y = dpI(MARGIN_DP)
+            y = dpI(if (isTop) MARGIN_DP + 2 else MARGIN_DP)
         }
 
         wm.addView(tv, params)
