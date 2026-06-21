@@ -104,7 +104,7 @@ class OverlayService : Service() {
         val wm = windowManager ?: return
         val tv = TextView(this).apply {
             gravity = Gravity.CENTER
-            setTextColor(0xFFFFFFFF.toInt())
+            setTextColor(contrastColor(Metric.COLOR_DEFAULT))
             textSize = metric.textSizeSp.toFloat()
             setTypeface(typeface, Typeface.BOLD)
             includeFontPadding = false
@@ -162,7 +162,17 @@ class OverlayService : Service() {
         mv.view.post {
             mv.view.text = text
             mv.background.setColor(color)
+            mv.view.setTextColor(contrastColor(color))
         }
+    }
+
+    /** Black on light backgrounds, white on dark ones (relative luminance). */
+    private fun contrastColor(bg: Int): Int {
+        val r = (bg shr 16) and 0xFF
+        val g = (bg shr 8) and 0xFF
+        val b = bg and 0xFF
+        val luminance = 0.299 * r + 0.587 * g + 0.114 * b
+        return if (luminance > 128.0) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
     }
 
     private fun startInForeground() {
