@@ -103,6 +103,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Riavvia il servizio se abilitato: dopo un update dell'APK il processo
+        // viene ucciso e il servizio non riparte da solo fino al reboot.
+        if (prefs.enabled && Settings.canDrawOverlays(this)) {
+            OverlayService.start(this)
+        }
         refreshSpinners()
         refresh()
     }
