@@ -4,8 +4,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
@@ -13,6 +15,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
@@ -49,10 +52,24 @@ class OverlayService : Service() {
     private val lastValues  = mutableMapOf<Metric, Double?>()
     @Volatile private var hrZone: Int? = null
 
-    // Visibili solo con registrazione attiva (o preview): fuori corsa le overlay
-    // coprirebbero le schermate di sistema (impostazioni, ricerca percorsi, ...).
+    // Visibili solo con registrazione attiva (o preview) e schermo acceso:
+    // fuori corsa le overlay coprirebbero le schermate di sistema (impostazioni,
+    // ricerca percorsi, ...), a schermo spento la schermata del battery save.
     @Volatile private var rideActive = false
     @Volatile private var previewActive = false
+    @Volatile private var screenOn = true
+
+    private val screenReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                Intent.ACTION_SCREEN_OFF -> screenOn = false
+                Intent.ACTION_SCREEN_ON  -> screenOn = true
+                else -> return
+            }
+            Log.i(TAG, "screenOn=$screenOn")
+            applyVisibility()
+        }
+    }
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var previewJob: Job? = null
@@ -79,6 +96,11 @@ class OverlayService : Service() {
         }
 
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        screenOn = (getSystemService(Context.POWER_SERVICE) as PowerManager).isInteractive
+        registerReceiver(screenReceiver, IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_SCREEN_ON)
+        })
         karoo = KarooSystemService(applicationContext)
         karoo.connect { connected ->
             Log.i(TAG, "Karoo connected=$connected")
@@ -114,8 +136,10 @@ class OverlayService : Service() {
         }
     }
 
+    private fun shouldShow() = (rideActive || previewActive) && screenOn
+
     private fun applyVisibility() {
-        val vis = if (rideActive || previewActive) View.VISIBLE else View.GONE
+        val vis = if (shouldShow()) View.VISIBLE else View.GONE
         metricViews.values.forEach { mv -> mv.view.post { mv.view.visibility = vis } }
     }
 
@@ -128,7 +152,7 @@ class OverlayService : Service() {
             setTypeface(typeface, Typeface.BOLD)
             includeFontPadding = false
             text = "-"
-            visibility = if (rideActive || previewActive) View.VISIBLE else View.GONE
+            visibility = if (shouldShow()) View.VISIBLE else View.GONE
         }
         val bg = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
@@ -278,6 +302,7 @@ class OverlayService : Service() {
     override fun onDestroy() {
         Log.i(TAG, "onDestroy")
         previewJob?.cancel()
+        runCatching { unregisterReceiver(screenReceiver) }
         runCatching { prefs.sp.unregisterOnSharedPreferenceChangeListener(prefsListener) }
         scope.cancel()
         consumerIds.forEach { runCatching { karoo.removeConsumer(it) } }
