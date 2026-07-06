@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.OnStreamState
+import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.StreamState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +48,11 @@ class OverlayService : Service() {
     private val metricViews = mutableMapOf<Metric, MetricView>()
     private val lastValues  = mutableMapOf<Metric, Double?>()
     @Volatile private var hrZone: Int? = null
+
+    // Visibili solo con registrazione attiva (o preview): fuori corsa le overlay
+    // coprirebbero le schermate di sistema (impostazioni, ricerca percorsi, ...).
+    @Volatile private var rideActive = false
+    @Volatile private var previewActive = false
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var previewJob: Job? = null
@@ -98,6 +104,19 @@ class OverlayService : Service() {
             if (metric == Metric.HR) hrPlaced = true
         }
         if (hrPlaced && karooConnected) subscribeHrZone()
+        if (karooConnected) subscribeRideState()
+    }
+
+    private fun subscribeRideState() {
+        consumerIds += karoo.addConsumer { state: RideState ->
+            rideActive = state is RideState.Recording
+            applyVisibility()
+        }
+    }
+
+    private fun applyVisibility() {
+        val vis = if (rideActive || previewActive) View.VISIBLE else View.GONE
+        metricViews.values.forEach { mv -> mv.view.post { mv.view.visibility = vis } }
     }
 
     private fun addMetricView(metric: Metric, slot: Slot) {
@@ -109,6 +128,7 @@ class OverlayService : Service() {
             setTypeface(typeface, Typeface.BOLD)
             includeFontPadding = false
             text = "-"
+            visibility = if (rideActive || previewActive) View.VISIBLE else View.GONE
         }
         val bg = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
@@ -208,6 +228,8 @@ class OverlayService : Service() {
     private fun startPreview() {
         if (metricViews.isEmpty()) return
         previewJob?.cancel()
+        previewActive = true
+        applyVisibility()
         previewJob = scope.launch {
             for (i in 0 until PREVIEW_STEPS) {
                 for (metric in metricViews.keys) {
@@ -217,12 +239,16 @@ class OverlayService : Service() {
                 }
                 delay(1000)
             }
+            previewActive = false
+            applyVisibility()
         }
     }
 
     private fun stopPreview() {
         previewJob?.cancel()
         previewJob = null
+        previewActive = false
+        applyVisibility()
         for (metric in metricViews.keys) {
             lastValues[metric] = null
             if (metric == Metric.HR) hrZone = null
