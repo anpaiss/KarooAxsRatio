@@ -51,8 +51,8 @@ Tiles use an adaptive text color: white on dark backgrounds, black on light ones
 
 ## Install
 
-1. Download `app-debug.apk` from the [latest release](../../releases/latest).
-2. Sideload it onto the Karoo (e.g. `adb install -r app-debug.apk`, or copy and
+1. Download `KarooAxsRatio.apk` from the [latest release](../../releases/latest).
+2. Sideload it onto the Karoo (e.g. `adb install -r KarooAxsRatio.apk`, or copy and
    open it on the device).
 3. Open **AXS Ratio** from the app list.
 4. Grant the **overlay** ("Display over other apps") permission when prompted.
