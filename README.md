@@ -3,7 +3,7 @@
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
 
-> **Public beta 0.99** — install the APK from the [latest release](../../releases/latest).
+> **Stable 1.0** — install the APK from the [latest release](../../releases/latest).
 
 A lightweight Hammerhead Karoo extension that draws small, always-visible metric
 tiles in the four corners of the ride screen, on top of whatever page you are
@@ -40,14 +40,13 @@ moves the previous metric to *Off*.
 Tiles use an adaptive text color: white on dark backgrounds, black on light ones
 (orange/green), so the value stays readable in every zone.
 
-## What's new in 0.99
+## What's new in 1.0
 
-- Tiles are now shown **only while a ride is recording**: they no longer cover
-  system screens such as settings or route search, and they hide when the ride
-  is paused. **Preview** still forces them visible.
-- Opening the app restarts the overlay service if it was enabled, so the
-  overlay comes back right after an APK update (previously it stayed off until
-  a reboot or a manual disable/enable).
+- First **stable** release.
+- Tiles now hide while the **screen is off** (battery save mode).
+- From 0.99: tiles are shown **only while a ride is recording** (never over
+  system screens, hidden on pause; **Preview** still forces them visible), and
+  opening the app restarts the overlay service after an APK update.
 
 ## Install
 
@@ -63,8 +62,8 @@ The overlay runs as a foreground service and re-starts on boot, so it stays up
 across rides. Tiles are visible only while a ride is recording (or during
 Preview), so they never get in the way on system screens.
 
-> This is a **beta** distributed as a debug-signed APK. It is not on the
-> Hammerhead app store.
+> Distributed as a debug-signed APK (kept for update compatibility with earlier
+> betas). It is not on the Hammerhead app store.
 
 ## Build from source
 
