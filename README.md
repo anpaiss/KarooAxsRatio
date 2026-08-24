@@ -44,12 +44,27 @@ look. Every text/background pairing keeps a WCAG contrast ratio of **at least
 4.5:1**, and light text gets a subtle shadow — so values stay readable even in
 direct sunlight on the transflective display.
 
-| Style | Look |
-|---|---|
-| **Vivid** *(default)* | The classic colored tiles. HR zones 2 and 5 use darker blue/red so the white text stays readable |
-| **Outline** | Black tiles, white text at maximum contrast; the HR zone is shown by the colored border |
-| **Pastel** | Soft pastel zone backgrounds with black text — the quiet, high-contrast option |
-| **Ink** | Black tiles with the value drawn in the zone color |
+Each preview below shows the same tiles over a light map and a dark background.
+Columns, left to right: default tile (gear 5), gear ≥ 10, then HR zones 1–5.
+
+**Vivid** *(default)* — the classic colored tiles. HR zones 2 and 5 use darker
+blue/red so the white text stays readable.
+
+<img src="docs/style-vivid.svg" width="616" alt="Vivid style tiles">
+
+**Outline** — black tiles, white text at maximum contrast; the HR zone is shown
+by the colored border. The best pick for direct sunlight.
+
+<img src="docs/style-outline.svg" width="616" alt="Outline style tiles">
+
+**Pastel** — soft pastel zone backgrounds with black text: the quiet,
+high-contrast option.
+
+<img src="docs/style-pastel.svg" width="616" alt="Pastel style tiles">
+
+**Ink** — black tiles with the value drawn in the zone color.
+
+<img src="docs/style-ink.svg" width="616" alt="Ink style tiles">
 
 Measured contrast ratios per tile (WCAG AA requires 4.5:1):
 

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="616" height="148" viewBox="0 0 616 148">
+  <defs>
+    <filter id="ts" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <style>
+    text { font: 700 26px Arial, Helvetica, sans-serif; text-anchor: middle; fill: #000; }
+  </style>
+  <rect x="0" y="0" width="616" height="74" fill="#E9E5DC"/>
+  <rect x="0" y="74" width="616" height="74" fill="#22252A"/>
+
+  <g>
+    <rect x="12" y="12" width="76" height="50" rx="8" fill="#FFAB91"/><text x="50" y="46">5</text>
+    <rect x="98" y="12" width="76" height="50" rx="8" fill="#000"/><text x="136" y="46" fill="#FFF" filter="url(#ts)">2</text>
+    <rect x="184" y="12" width="76" height="50" rx="8" fill="#E0E0E0"/><text x="222" y="46">92</text>
+    <rect x="270" y="12" width="76" height="50" rx="8" fill="#90CAF9"/><text x="308" y="46">118</text>
+    <rect x="356" y="12" width="76" height="50" rx="8" fill="#A5D6A7"/><text x="394" y="46">141</text>
+    <rect x="442" y="12" width="76" height="50" rx="8" fill="#FFCC80"/><text x="480" y="46">163</text>
+    <rect x="528" y="12" width="76" height="50" rx="8" fill="#EF9A9A"/><text x="566" y="46">178</text>
+  </g>
+  <g>
+    <rect x="12" y="86" width="76" height="50" rx="8" fill="#FFAB91"/><text x="50" y="120">5</text>
+    <rect x="98" y="86" width="76" height="50" rx="8" fill="#000" stroke="#3A3E45" stroke-width="1"/><text x="136" y="120" fill="#FFF" filter="url(#ts)">2</text>
+    <rect x="184" y="86" width="76" height="50" rx="8" fill="#E0E0E0"/><text x="222" y="120">92</text>
+    <rect x="270" y="86" width="76" height="50" rx="8" fill="#90CAF9"/><text x="308" y="120">118</text>
+    <rect x="356" y="86" width="76" height="50" rx="8" fill="#A5D6A7"/><text x="394" y="120">141</text>
+    <rect x="442" y="86" width="76" height="50" rx="8" fill="#FFCC80"/><text x="480" y="120">163</text>
+    <rect x="528" y="86" width="76" height="50" rx="8" fill="#EF9A9A"/><text x="566" y="120">178</text>
+  </g>
+</svg>

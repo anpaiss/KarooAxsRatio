@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="616" height="148" viewBox="0 0 616 148">
+  <defs>
+    <filter id="ts" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+  <style>
+    text { font: 700 26px Arial, Helvetica, sans-serif; text-anchor: middle; fill: #FFF; }
+    rect.t { fill: #101010; stroke-width: 3; }
+  </style>
+  <rect x="0" y="0" width="616" height="74" fill="#E9E5DC"/>
+  <rect x="0" y="74" width="616" height="74" fill="#22252A"/>
+
+  <g>
+    <rect class="t" x="12" y="12" width="76" height="50" rx="8" stroke="#FF5823"/><text x="50" y="46" filter="url(#ts)">5</text>
+    <rect class="t" x="98" y="12" width="76" height="50" rx="8" stroke="#FFFFFF"/><text x="136" y="46" filter="url(#ts)">2</text>
+    <rect class="t" x="184" y="12" width="76" height="50" rx="8" stroke="#9E9E9E"/><text x="222" y="46" filter="url(#ts)">92</text>
+    <rect class="t" x="270" y="12" width="76" height="50" rx="8" stroke="#2196F3"/><text x="308" y="46" filter="url(#ts)">118</text>
+    <rect class="t" x="356" y="12" width="76" height="50" rx="8" stroke="#4CAF50"/><text x="394" y="46" filter="url(#ts)">141</text>
+    <rect class="t" x="442" y="12" width="76" height="50" rx="8" stroke="#FF9800"/><text x="480" y="46" filter="url(#ts)">163</text>
+    <rect class="t" x="528" y="12" width="76" height="50" rx="8" stroke="#F44336"/><text x="566" y="46" filter="url(#ts)">178</text>
+  </g>
+  <g>
+    <rect class="t" x="12" y="86" width="76" height="50" rx="8" stroke="#FF5823"/><text x="50" y="120" filter="url(#ts)">5</text>
+    <rect class="t" x="98" y="86" width="76" height="50" rx="8" stroke="#FFFFFF"/><text x="136" y="120" filter="url(#ts)">2</text>
+    <rect class="t" x="184" y="86" width="76" height="50" rx="8" stroke="#9E9E9E"/><text x="222" y="120" filter="url(#ts)">92</text>
+    <rect class="t" x="270" y="86" width="76" height="50" rx="8" stroke="#2196F3"/><text x="308" y="120" filter="url(#ts)">118</text>
+    <rect class="t" x="356" y="86" width="76" height="50" rx="8" stroke="#4CAF50"/><text x="394" y="120" filter="url(#ts)">141</text>
+    <rect class="t" x="442" y="86" width="76" height="50" rx="8" stroke="#FF9800"/><text x="480" y="120" filter="url(#ts)">163</text>
+    <rect class="t" x="528" y="86" width="76" height="50" rx="8" stroke="#F44336"/><text x="566" y="120" filter="url(#ts)">178</text>
+  </g>
+</svg>
