@@ -31,8 +31,8 @@ android {
         applicationId = "com.anpaiss.axsratio"
         minSdk        = 23
         targetSdk     = 34
-        versionCode   = 12
-        versionName   = "1.0.1"
+        versionCode   = 13
+        versionName   = "1.1.0-beta1"
     }
 
     buildTypes {
