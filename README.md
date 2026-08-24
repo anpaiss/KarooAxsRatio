@@ -3,7 +3,7 @@
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
 
-> **Stable 1.0.1** — install the APK from the [latest release](../../releases/latest).
+> **Stable 1.1.0** — install the APK from the [latest release](../../releases/latest).
 
 A lightweight Hammerhead Karoo extension that draws small, always-visible metric
 tiles in the four corners of the ride screen, on top of whatever page you are
@@ -81,7 +81,7 @@ Measured contrast ratios per tile (WCAG AA requires 4.5:1):
 Switching style while **Preview** is running restarts the preview cycle, so you
 can compare styles with all the HR zones simulated.
 
-## What's new in 1.1 (in development)
+## What's new in 1.1
 
 - **Four selectable tile styles** — Vivid, Outline, Pastel, Ink — under the new
   **Appearance** setting. Every pairing is WCAG AA compliant; this fixes the
