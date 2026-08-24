@@ -55,6 +55,25 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Appearance"
+            android:textStyle="bold"
+            android:textSize="14sp" />
+
+        <LinearLayout style="@style/MetricRow">
+            <TextView style="@style/MetricLabel" android:text="Tile style" />
+            <Spinner android:id="@+id/sp_style" style="@style/MetricSpinner" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="#888888" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Metric placement"
             android:textStyle="bold"
             android:textSize="14sp" />

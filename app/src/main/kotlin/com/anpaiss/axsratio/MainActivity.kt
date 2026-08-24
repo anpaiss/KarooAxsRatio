@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
     private val slotValues = Slot.values()
     private val slotLabels = slotValues.map { it.label }
 
+    private lateinit var styleSpinner: Spinner
+    private val styleValues = TileStyle.values()
+    private val styleLabels = styleValues.map { it.label }
+
     private var previewing = false
     private val previewAutoStop = Runnable {
         previewing = false
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         toggleBtn     = findViewById(R.id.btn_toggle)
         previewBtn    = findViewById(R.id.btn_preview)
 
+        bindStyleSpinner()
         bindSpinner(Metric.GEAR,    R.id.sp_gear)
         bindSpinner(Metric.HR,      R.id.sp_hr)
         bindSpinner(Metric.POWER,   R.id.sp_power)
@@ -84,6 +89,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun bindStyleSpinner() {
+        styleSpinner = findViewById(R.id.sp_style)
+        styleSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, styleLabels)
+        styleSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (suppressSpinnerCallbacks) return
+                val newStyle = styleValues[position]
+                if (prefs.tileStyle == newStyle) return
+                prefs.tileStyle = newStyle  // l'OverlayService si ricostruisce via prefs listener
+                // Durante la preview il cambio stile la fa ripartire da capo:
+                // senza, il ciclo da 12s scade mentre si confrontano gli stili.
+                if (previewing) {
+                    OverlayService.preview(this@MainActivity)
+                    previewBtn.removeCallbacks(previewAutoStop)
+                    previewBtn.postDelayed(previewAutoStop, 12_500L)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
     private fun bindSpinner(metric: Metric, viewId: Int) {
         val sp = findViewById<Spinner>(viewId)
         sp.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, slotLabels)
@@ -118,6 +144,8 @@ class MainActivity : AppCompatActivity() {
             val ord = prefs.slotFor(metric).ordinal
             if (sp.selectedItemPosition != ord) sp.setSelection(ord, false)
         }
+        val styleOrd = prefs.tileStyle.ordinal
+        if (styleSpinner.selectedItemPosition != styleOrd) styleSpinner.setSelection(styleOrd, false)
         suppressSpinnerCallbacks = false
     }
 

@@ -37,8 +37,44 @@ moves the previous metric to *Off*.
 | 4    | Orange |
 | 5    | Red    |
 
-Tiles use an adaptive text color: white on dark backgrounds, black on light ones
-(orange/green), so the value stays readable in every zone.
+## Tile styles
+
+Four presets (Settings → **Appearance** → **Tile style**) control how the tiles
+look. Every text/background pairing keeps a WCAG contrast ratio of **at least
+4.5:1**, and light text gets a subtle shadow — so values stay readable even in
+direct sunlight on the transflective display.
+
+| Style | Look |
+|---|---|
+| **Vivid** *(default)* | The classic colored tiles. HR zones 2 and 5 use darker blue/red so the white text stays readable |
+| **Outline** | Black tiles, white text at maximum contrast; the HR zone is shown by the colored border |
+| **Pastel** | Soft pastel zone backgrounds with black text — the quiet, high-contrast option |
+| **Ink** | Black tiles with the value drawn in the zone color |
+
+Measured contrast ratios per tile (WCAG AA requires 4.5:1):
+
+| Tile | Vivid | Outline | Pastel | Ink |
+|---|---|---|---|---|
+| Default (gear, power, …) | 6.7:1 | 19:1 | 11.5:1 | 6.7:1 |
+| Gear ≥ 10 | 21:1 | 19:1 | 21:1 | 21:1 |
+| HR zone 1 (grey) | 7.8:1 | 19:1 | 13.9:1 | 7.8:1 |
+| HR zone 2 (blue) | 4.6:1 | 19:1 | 12.0:1 | 6.7:1 |
+| HR zone 3 (green) | 7.6:1 | 19:1 | 12.8:1 | 7.6:1 |
+| HR zone 4 (orange) | 9.7:1 | 19:1 | 14.2:1 | 9.7:1 |
+| HR zone 5 (red) | 5.0:1 | 19:1 | 9.8:1 | 5.7:1 |
+
+Switching style while **Preview** is running restarts the preview cycle, so you
+can compare styles with all the HR zones simulated.
+
+## What's new in 1.1 (in development)
+
+- **Four selectable tile styles** — Vivid, Outline, Pastel, Ink — under the new
+  **Appearance** setting. Every pairing is WCAG AA compliant; this fixes the
+  hard-to-read HR zone 2 (blue) and zone 5 (red) tiles reported on 1.0.
+- Light text gets a subtle **shadow** for readability in direct sunlight.
+- Switching style during **Preview** restarts the preview cycle.
+- The overlay service **restarts automatically after an APK update** — no more
+  opening the app (or rebooting) to bring the tiles back.
 
 ## What's new in 1.0
 

@@ -51,6 +51,7 @@ class OverlayService : Service() {
     private val metricViews = mutableMapOf<Metric, MetricView>()
     private val lastValues  = mutableMapOf<Metric, Double?>()
     @Volatile private var hrZone: Int? = null
+    @Volatile private var style = TileStyle.VIVID
 
     // Visibili solo con registrazione attiva (o preview) e schermo acceso:
     // fuori corsa le overlay coprirebbero le schermate di sistema (impostazioni,
@@ -76,7 +77,7 @@ class OverlayService : Service() {
     private var karooConnected = false
 
     private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        if (key == null || key.startsWith(Prefs.KEY_SLOT_PREFIX)) {
+        if (key == null || key.startsWith(Prefs.KEY_SLOT_PREFIX) || key == Prefs.KEY_TILE_STYLE) {
             scope.launch { rebuild() }
         }
     }
@@ -116,6 +117,7 @@ class OverlayService : Service() {
         metricViews.values.forEach { mv -> runCatching { windowManager?.removeView(mv.view) } }
         metricViews.clear()
         hrZone = null
+        style  = prefs.tileStyle
 
         var hrPlaced = false
         for (metric in Metric.values()) {
@@ -145,9 +147,9 @@ class OverlayService : Service() {
 
     private fun addMetricView(metric: Metric, slot: Slot) {
         val wm = windowManager ?: return
+        val colors = style.colorsFor(metric, null, null)
         val tv = TextView(this).apply {
             gravity = Gravity.CENTER
-            setTextColor(contrastColor(Metric.COLOR_DEFAULT))
             textSize = metric.textSizeSp.toFloat()
             setTypeface(typeface, Typeface.BOLD)
             includeFontPadding = false
@@ -157,9 +159,9 @@ class OverlayService : Service() {
         val bg = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = dpF(6f)
-            setColor(Metric.COLOR_DEFAULT)
         }
         tv.background = bg
+        applyColors(tv, bg, colors)
 
         val params = WindowManager.LayoutParams(
             dpI(metric.widthDp),
@@ -201,23 +203,29 @@ class OverlayService : Service() {
 
     private fun render(metric: Metric) {
         val mv = metricViews[metric] ?: return
-        val value = lastValues[metric]
-        val text  = metric.format(value)
-        val color = metric.backgroundColor(value, hrZone)
+        val value  = lastValues[metric]
+        val text   = metric.format(value)
+        val colors = style.colorsFor(metric, value, hrZone)
         mv.view.post {
             mv.view.text = text
-            mv.background.setColor(color)
-            mv.view.setTextColor(contrastColor(color))
+            applyColors(mv.view, mv.background, colors)
         }
     }
 
-    /** Black on light backgrounds, white on dark ones (relative luminance). */
-    private fun contrastColor(bg: Int): Int {
-        val r = (bg shr 16) and 0xFF
-        val g = (bg shr 8) and 0xFF
-        val b = bg and 0xFF
-        val luminance = 0.299 * r + 0.587 * g + 0.114 * b
-        return if (luminance > 128.0) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
+    /**
+     * Applica sfondo, bordo, colore testo e ombra. L'ombra serve solo al testo
+     * chiaro (bianco o colorato su fondo scuro) per la leggibilità in pieno
+     * sole; sul testo nero peggiorerebbe la resa.
+     */
+    private fun applyColors(tv: TextView, bg: GradientDrawable, colors: TileColors) {
+        bg.setColor(colors.bg)
+        bg.setStroke(dpI(colors.borderWidthDp), colors.border)
+        tv.setTextColor(colors.text)
+        if (colors.text == 0xFF000000.toInt()) {
+            tv.setShadowLayer(0f, 0f, 0f, 0)
+        } else {
+            tv.setShadowLayer(dpF(2f), 0f, dpF(1f), 0xB3000000.toInt())
+        }
     }
 
     private fun startInForeground() {

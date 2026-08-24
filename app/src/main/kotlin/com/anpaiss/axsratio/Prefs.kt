@@ -11,6 +11,13 @@ class Prefs(ctx: Context) {
         get() = sp.getBoolean(KEY_ENABLED, false)
         set(v) = sp.edit().putBoolean(KEY_ENABLED, v).apply()
 
+    var tileStyle: TileStyle
+        get() {
+            val raw = sp.getString(KEY_TILE_STYLE, null) ?: return TileStyle.VIVID
+            return runCatching { TileStyle.valueOf(raw) }.getOrDefault(TileStyle.VIVID)
+        }
+        set(v) = sp.edit().putString(KEY_TILE_STYLE, v.name).apply()
+
     fun slotFor(metric: Metric): Slot {
         val raw = sp.getString(slotKey(metric), null) ?: return defaultSlot(metric)
         return runCatching { Slot.valueOf(raw) }.getOrDefault(Slot.OFF)
@@ -35,5 +42,6 @@ class Prefs(ctx: Context) {
         private const val NAME             = "axs_ratio_prefs"
         private const val KEY_ENABLED      = "enabled"
         const val         KEY_SLOT_PREFIX  = "slot_"
+        const val         KEY_TILE_STYLE   = "tile_style"
     }
 }

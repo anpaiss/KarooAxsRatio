@@ -36,24 +36,4 @@ enum class Metric(
         } ?: "-"
     }
 
-    /** ARGB background. For HR pass the latest [hrZone]; ignored otherwise. */
-    fun backgroundColor(value: Double?, hrZone: Int?): Int = when (this) {
-        GEAR -> {
-            val g = value?.toInt() ?: 0
-            if (g >= 10) 0xFF000000.toInt() else COLOR_DEFAULT
-        }
-        HR -> when (hrZone) {
-            1    -> 0xFF9E9E9E.toInt()
-            2    -> 0xFF2196F3.toInt()
-            3    -> 0xFF4CAF50.toInt()
-            4    -> 0xFFFF9800.toInt()
-            5    -> 0xFFF44336.toInt()
-            else -> COLOR_DEFAULT
-        }
-        else -> COLOR_DEFAULT
-    }
-
-    companion object {
-        const val COLOR_DEFAULT = 0xFFFF5823.toInt()
-    }
 }
