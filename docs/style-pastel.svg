@@ -12,7 +12,7 @@
 
   <g>
     <rect x="12" y="12" width="76" height="50" rx="8" fill="#FFAB91"/><text x="50" y="46">5</text>
-    <rect x="98" y="12" width="76" height="50" rx="8" fill="#000"/><text x="136" y="46" fill="#FFF" filter="url(#ts)">2</text>
+    <rect x="98" y="12" width="76" height="50" rx="8" fill="#000"/><text x="136" y="46" style="fill:#FFF" filter="url(#ts)">2</text>
     <rect x="184" y="12" width="76" height="50" rx="8" fill="#E0E0E0"/><text x="222" y="46">92</text>
     <rect x="270" y="12" width="76" height="50" rx="8" fill="#90CAF9"/><text x="308" y="46">118</text>
     <rect x="356" y="12" width="76" height="50" rx="8" fill="#A5D6A7"/><text x="394" y="46">141</text>
@@ -21,7 +21,7 @@
   </g>
   <g>
     <rect x="12" y="86" width="76" height="50" rx="8" fill="#FFAB91"/><text x="50" y="120">5</text>
-    <rect x="98" y="86" width="76" height="50" rx="8" fill="#000" stroke="#3A3E45" stroke-width="1"/><text x="136" y="120" fill="#FFF" filter="url(#ts)">2</text>
+    <rect x="98" y="86" width="76" height="50" rx="8" fill="#000" stroke="#3A3E45" stroke-width="1"/><text x="136" y="120" style="fill:#FFF" filter="url(#ts)">2</text>
     <rect x="184" y="86" width="76" height="50" rx="8" fill="#E0E0E0"/><text x="222" y="120">92</text>
     <rect x="270" y="86" width="76" height="50" rx="8" fill="#90CAF9"/><text x="308" y="120">118</text>
     <rect x="356" y="86" width="76" height="50" rx="8" fill="#A5D6A7"/><text x="394" y="120">141</text>

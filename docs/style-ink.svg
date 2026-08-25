@@ -13,7 +13,7 @@
 
   <g>
     <rect class="t" x="12" y="12" width="76" height="50" rx="8"/><text x="50" y="46" fill="#FF5823" filter="url(#ts)">5</text>
-    <rect class="t" x="98" y="12" width="76" height="50" rx="8"/><text x="136" y="46" fill="#FFF" filter="url(#ts)">2</text>
+    <rect class="t" x="98" y="12" width="76" height="50" rx="8"/><text x="136" y="46" style="fill:#FFF" filter="url(#ts)">2</text>
     <rect class="t" x="184" y="12" width="76" height="50" rx="8"/><text x="222" y="46" fill="#9E9E9E" filter="url(#ts)">92</text>
     <rect class="t" x="270" y="12" width="76" height="50" rx="8"/><text x="308" y="46" fill="#2196F3" filter="url(#ts)">118</text>
     <rect class="t" x="356" y="12" width="76" height="50" rx="8"/><text x="394" y="46" fill="#4CAF50" filter="url(#ts)">141</text>
@@ -22,7 +22,7 @@
   </g>
   <g>
     <rect class="t" x="12" y="86" width="76" height="50" rx="8"/><text x="50" y="120" fill="#FF5823" filter="url(#ts)">5</text>
-    <rect class="t" x="98" y="86" width="76" height="50" rx="8"/><text x="136" y="120" fill="#FFF" filter="url(#ts)">2</text>
+    <rect class="t" x="98" y="86" width="76" height="50" rx="8"/><text x="136" y="120" style="fill:#FFF" filter="url(#ts)">2</text>
     <rect class="t" x="184" y="86" width="76" height="50" rx="8"/><text x="222" y="120" fill="#9E9E9E" filter="url(#ts)">92</text>
     <rect class="t" x="270" y="86" width="76" height="50" rx="8"/><text x="308" y="120" fill="#2196F3" filter="url(#ts)">118</text>
     <rect class="t" x="356" y="86" width="76" height="50" rx="8"/><text x="394" y="120" fill="#4CAF50" filter="url(#ts)">141</text>
