@@ -132,3 +132,7 @@ SDK. `minSdk 23`, `targetSdk 34`.
 ## Status
 
 Personal project, shared as-is. Feedback and issues welcome.
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
