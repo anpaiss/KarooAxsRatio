@@ -10,6 +10,19 @@ tiles in the four corners of the ride screen, on top of whatever page you are
 viewing. It was born to keep the current **SRAM AXS rear gear** in sight at all
 times, and grew to show a handful of other live ride metrics.
 
+## Screenshots
+
+On-device, over the map page — the four tile styles (Vivid, Outline, Pastel,
+Ink) and the settings screen:
+
+<p>
+  <img src="docs/screenshot-vivid.png" width="19%" alt="Vivid style on the map page">
+  <img src="docs/screenshot-outline.png" width="19%" alt="Outline style on the map page">
+  <img src="docs/screenshot-pastel.png" width="19%" alt="Pastel style on the map page">
+  <img src="docs/screenshot-ink.png" width="19%" alt="Ink style on the map page">
+  <img src="docs/screenshot-settings.png" width="19%" alt="Settings screen">
+</p>
+
 ## What it shows
 
 Each metric can be placed in one of the four corners (Top-left, Top-right,
