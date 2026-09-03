@@ -3,7 +3,7 @@
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
 
-> **Stable 1.1.0** — install the APK from the [latest release](../../releases/latest).
+> **Stable 1.1.1** — install the APK from the [latest release](../../releases/latest).
 
 A lightweight Hammerhead Karoo extension that draws small, always-visible metric
 tiles in the four corners of the ride screen, on top of whatever page you are
@@ -94,6 +94,11 @@ Measured contrast ratios per tile (WCAG AA requires 4.5:1):
 Switching style while **Preview** is running restarts the preview cycle, so you
 can compare styles with all the HR zones simulated.
 
+## What's new in 1.1.1
+
+- Ships a Karoo **extension manifest**, so the app can be listed in the Karoo
+  Extension Library and offer updates from there. No functional change.
+
 ## What's new in 1.1
 
 - **Four selectable tile styles** — Vivid, Outline, Pastel, Ink — under the new
@@ -128,7 +133,22 @@ Preview), so they never get in the way on system screens.
 
 > From 1.0.1 the APK is **release-signed**. Updating from 1.0 or any beta
 > (debug-signed) requires a one-time uninstall/reinstall — overlay settings
-> will need to be set again. It is not on the Hammerhead app store.
+> will need to be set again.
+
+From 1.1.1 the APK declares `https://github.com/anpaiss/KarooAxsRatio/releases/latest/download/manifest.json`
+as its `MANIFEST_URL`, and every release carries that file next to the APK: that
+is what lets the Karoo Extension Library list the app and offer updates.
+
+### Publishing a release (maintainer notes)
+
+1. Bump `versionCode` (must increase — it is what the Karoo compares to offer an
+   update) and `versionName` in `app/build.gradle.kts`.
+2. `./gradlew assembleRelease` with the release keystore in `local.properties`
+   (`signing.*`). The build also writes `app/manifest.json` with the same version
+   and code.
+3. Create the GitHub release for tag `vX.Y.Z` (not a pre-release: `latest` only
+   resolves to stable releases) and attach **both** files, `KarooAxsRatio.apk` and
+   `manifest.json`, with exactly those names — both URLs are fixed.
 
 ## Build from source
 
