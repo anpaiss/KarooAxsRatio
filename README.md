@@ -1,5 +1,7 @@
-![Downloads](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/anpaiss/78cf5eb76ad50594402b9778008a00a8/raw/KarooAxsRatio-downloads.json)
-![Release](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/anpaiss/78cf5eb76ad50594402b9778008a00a8/raw/KarooAxsRatio-release.json)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://gist.githubusercontent.com/anpaiss/78cf5eb76ad50594402b9778008a00a8/raw/KarooAxsRatio-card-dark.svg">
+  <img alt="Downloads and latest release" src="https://gist.githubusercontent.com/anpaiss/78cf5eb76ad50594402b9778008a00a8/raw/KarooAxsRatio-card-light.svg">
+</picture>
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
 
