@@ -1,4 +1,4 @@
-![Total Downloads](https://img.shields.io/github/downloads/anpaiss/KarooAxsRatio/total?color=blue)
+![Total Downloads](https://img.shields.io/github/downloads/anpaiss/KarooAxsRatio/KarooAxsRatio.apk?color=blue)
 ![Latest Release](https://img.shields.io/github/v/release/anpaiss/KarooAxsRatio)
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
