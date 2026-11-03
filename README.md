@@ -168,6 +168,12 @@ SDK. `minSdk 23`, `targetSdk 34`.
 
 Personal project, shared as-is. Feedback and issues welcome.
 
+## Is it safe?
+
+- The code is all here, open source.
+- `KarooAxsRatio.apk` 1.1.0 on [VirusTotal](https://www.virustotal.com/gui/file/b912faee915bea023da657ab0066743306212628dbb0568e708622f8b28a17e1): none of the 47 antivirus engines flag it.
+- Its SHA-256 is `b912faee915bea023da657ab0066743306212628dbb0568e708622f8b28a17e1`; compare it with the file you downloaded (`certutil -hashfile KarooAxsRatio.apk SHA256` on Windows, `sha256sum KarooAxsRatio.apk` elsewhere).
+
 ## Support
 
 Karoo AXS Ratio is free and open source, and will stay that way. If it made a ride better, you can [buy me a coffee on Ko-fi](https://ko-fi.com/anpaiss): it pays for the small things, a development board, a 3D-printed case, a few hours of testing on the trails.
