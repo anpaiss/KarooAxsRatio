@@ -168,6 +168,12 @@ SDK. `minSdk 23`, `targetSdk 34`.
 
 Personal project, shared as-is. Feedback and issues welcome.
 
+<!-- battery:karooaxsratio -->
+## Battery use
+
+**< 0.1 % of the Karoo's battery use**, measured with Android's battery statistics (provisional, Karoo 3, 4 November 2026). How it was measured, and why the number is provisional: [the battery measurements of the extensions](https://lagorai.bike/blog/karoo-extensions-battery-use/).
+<!-- /battery:karooaxsratio -->
+
 ## Is it safe?
 
 - The code is all here, open source.
