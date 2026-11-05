@@ -181,3 +181,5 @@ Karoo AXS Ratio is free and open source, and will stay that way. If it made a ri
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+If you build on this code, or on its ideas, a mention is much appreciated: a link to this repository is enough.
