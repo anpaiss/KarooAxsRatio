@@ -23,8 +23,12 @@ enum class Metric(
     ;
 
     fun format(value: Double?): String = when (this) {
-        // the whole number: 10 to 13 on 12- and 13-speed cassettes (the tile shrinks the text for two digits)
-        GEAR -> if (value == null || value <= 0) "-" else value.toInt().toString()
+        // one digit on purpose, to keep the tile small: 10 to 13 show 0 to 3 on a black tile, the legs tell 3 from 13
+        GEAR -> when {
+            value == null || value <= 0 -> "-"
+            value < 10                  -> value.toInt().toString()
+            else                        -> (value.toInt() % 10).toString()
+        }
         HR, POWER, CADENCE -> value?.roundToInt()?.toString() ?: "-"
         SPEED              -> value?.let { (it * 3.6).roundToInt().toString() } ?: "-"
         GRADE              -> value?.let { String.format("%+.0f%%", it) } ?: "-"

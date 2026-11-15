@@ -207,7 +207,6 @@ class OverlayService : Service() {
         val text   = metric.format(value)
         val colors = style.colorsFor(metric, value, hrZone)
         mv.view.post {
-            if (metric == Metric.GEAR) mv.view.textSize = if (text.length > 1) GEAR_TWO_DIGITS_SP else metric.textSizeSp.toFloat()
             mv.view.text = text
             applyColors(mv.view, mv.background, colors)
         }
@@ -331,8 +330,6 @@ class OverlayService : Service() {
         private const val CH_ID     = "axs_ratio_overlay"
         private const val NOTIF_ID  = 1
         private const val MARGIN_DP = 2
-        /** Gear 10 to 13 in the 44 dp tile: two digits need a smaller text than the single-digit 30 sp. */
-        private const val GEAR_TWO_DIGITS_SP = 24f
 
         const val ACTION_PREVIEW      = "com.anpaiss.axsratio.PREVIEW"
         const val ACTION_STOP_PREVIEW = "com.anpaiss.axsratio.STOP_PREVIEW"
