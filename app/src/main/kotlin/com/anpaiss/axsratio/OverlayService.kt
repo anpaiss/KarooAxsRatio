@@ -186,8 +186,8 @@ class OverlayService : Service() {
         consumerIds += karoo.addConsumer(
             OnStreamState.StartStreaming(metric.streamType), { _ -> }, {}
         ) { event: OnStreamState ->
-            val v = (event.state as? StreamState.Streaming)?.dataPoint?.singleValue
-            lastValues[metric] = v
+            val dp = (event.state as? StreamState.Streaming)?.dataPoint
+            lastValues[metric] = dp?.let { it.values[metric.field] ?: it.singleValue }
             render(metric)
         }
     }
@@ -196,7 +196,7 @@ class OverlayService : Service() {
         consumerIds += karoo.addConsumer(
             OnStreamState.StartStreaming(DataType.Type.HR_ZONE), { _ -> }, {}
         ) { event: OnStreamState ->
-            hrZone = (event.state as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt()
+            hrZone = (event.state as? StreamState.Streaming)?.dataPoint?.let { it.values[DataType.Field.HR_ZONE] ?: it.singleValue }?.toInt()
             render(Metric.HR)
         }
     }
@@ -207,6 +207,7 @@ class OverlayService : Service() {
         val text   = metric.format(value)
         val colors = style.colorsFor(metric, value, hrZone)
         mv.view.post {
+            if (metric == Metric.GEAR) mv.view.textSize = if (text.length > 1) GEAR_TWO_DIGITS_SP else metric.textSizeSp.toFloat()
             mv.view.text = text
             applyColors(mv.view, mv.background, colors)
         }
@@ -330,6 +331,8 @@ class OverlayService : Service() {
         private const val CH_ID     = "axs_ratio_overlay"
         private const val NOTIF_ID  = 1
         private const val MARGIN_DP = 2
+        /** Gear 10 to 13 in the 44 dp tile: two digits need a smaller text than the single-digit 30 sp. */
+        private const val GEAR_TWO_DIGITS_SP = 24f
 
         const val ACTION_PREVIEW      = "com.anpaiss.axsratio.PREVIEW"
         const val ACTION_STOP_PREVIEW = "com.anpaiss.axsratio.STOP_PREVIEW"
