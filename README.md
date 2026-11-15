@@ -98,8 +98,11 @@ can compare styles with all the HR zones simulated.
 
 ## What's new in 1.1.2
 
-- **To next turn** shows the distance to the next turn again: it stayed at 0 m
-  (reported on Reddit). Every tile now reads its own value from the Karoo's data.
+- **Bug fix, reported on Reddit: the To next turn tile always showed 0 m.** The
+  Karoo sends the distance to the next turn together with other navigation values
+  (navigation state, rerouting, on route), and the app read the first value of the
+  group instead of the distance. Now every tile reads its own value: To next turn
+  shows the same distance as the Karoo's turn banner.
 
 ## What's new in 1.1.1
 
