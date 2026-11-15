@@ -5,7 +5,7 @@
 
 # Karoo AXS Ratio — Corner Overlay for Hammerhead Karoo
 
-> **Stable 1.1.1** — install the APK from the [latest release](../../releases/latest).
+> **Stable 1.1.2** — install the APK from the [latest release](../../releases/latest).
 
 A lightweight Hammerhead Karoo extension that draws small, always-visible metric
 tiles in the four corners of the ride screen, on top of whatever page you are
@@ -96,6 +96,11 @@ Measured contrast ratios per tile (WCAG AA requires 4.5:1):
 Switching style while **Preview** is running restarts the preview cycle, so you
 can compare styles with all the HR zones simulated.
 
+## What's new in 1.1.2
+
+- **To next turn** shows the distance to the next turn again: it stayed at 0 m
+  (reported on Reddit). Every tile now reads its own value from the Karoo's data.
+
 ## What's new in 1.1.1
 
 - Ships a Karoo **extension manifest**, so the app can be listed in the Karoo
@@ -177,7 +182,7 @@ Personal project, shared as-is. Feedback and issues welcome.
 ## Is it safe?
 
 - The code is all here, open source.
-- `KarooAxsRatio.apk` 1.1.1 has SHA-256 `60f401a0f18d223358ccd3d8a637da5615054d907ea9af8d72b7d8236ebac179`; compare it with the file you downloaded (`certutil -hashfile KarooAxsRatio.apk SHA256` on Windows, `sha256sum KarooAxsRatio.apk` elsewhere). Its VirusTotal report will be linked here.
+- `KarooAxsRatio.apk` 1.1.2 has SHA-256 `6610145b363d25d911a48e17cde7b8cc77fd143687f40efe42123d63b5372924`; compare it with the file you downloaded (`certutil -hashfile KarooAxsRatio.apk SHA256` on Windows, `sha256sum KarooAxsRatio.apk` elsewhere). Its VirusTotal report will be linked here.
 - `KarooAxsRatio.apk` 1.1.1 on [VirusTotal](https://www.virustotal.com/gui/file/60f401a0f18d223358ccd3d8a637da5615054d907ea9af8d72b7d8236ebac179): none of the 67 antivirus engines flag it.
 
 ## Support
