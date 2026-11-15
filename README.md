@@ -185,8 +185,8 @@ Personal project, shared as-is. Feedback and issues welcome.
 ## Is it safe?
 
 - The code is all here, open source.
-- `KarooAxsRatio.apk` 1.1.2 has SHA-256 `6610145b363d25d911a48e17cde7b8cc77fd143687f40efe42123d63b5372924`; compare it with the file you downloaded (`certutil -hashfile KarooAxsRatio.apk SHA256` on Windows, `sha256sum KarooAxsRatio.apk` elsewhere). Its VirusTotal report will be linked here.
-- `KarooAxsRatio.apk` 1.1.1 on [VirusTotal](https://www.virustotal.com/gui/file/60f401a0f18d223358ccd3d8a637da5615054d907ea9af8d72b7d8236ebac179): none of the 67 antivirus engines flag it.
+- `KarooAxsRatio.apk` 1.1.2 has SHA-256 `6610145b363d25d911a48e17cde7b8cc77fd143687f40efe42123d63b5372924`; compare it with the file you downloaded (`certutil -hashfile KarooAxsRatio.apk SHA256` on Windows, `sha256sum KarooAxsRatio.apk` elsewhere).
+- `KarooAxsRatio.apk` 1.1.2 on [VirusTotal](https://www.virustotal.com/gui/file/6610145b363d25d911a48e17cde7b8cc77fd143687f40efe42123d63b5372924): none of the 67 antivirus engines flag it.
 
 ## Support
 
